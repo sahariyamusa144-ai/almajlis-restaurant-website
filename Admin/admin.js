@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api/menu";
+const API_URL = "/api/menu";
 
 const menuForm =
     document.getElementById("menuForm");
