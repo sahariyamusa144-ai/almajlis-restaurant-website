@@ -1,0 +1,1142 @@
+/* =========================================================
+   ALMAJLIS ADMIN DASHBOARD
+   PREMIUM BLACK + GOLD DESIGN
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
+
+:root {
+    --black: #080808;
+    --black-2: #0d0d0d;
+    --black-3: #121212;
+    --black-4: #181818;
+
+    --gold: #c9a45c;
+    --gold-light: #e4c985;
+    --gold-dark: #92743a;
+
+    --white: #f7f4ed;
+    --text: #d7d3c9;
+    --muted: #85827b;
+
+    --green: #5fbd87;
+    --orange: #d6a45b;
+    --red: #d56a6a;
+
+    --border: rgba(201, 164, 92, 0.20);
+    --gold-glow: rgba(201, 164, 92, 0.12);
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background:
+        radial-gradient(circle at top right, rgba(201, 164, 92, 0.07), transparent 30%),
+        var(--black);
+    color: var(--text);
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+}
+
+button,
+select,
+input {
+    font-family: inherit;
+}
+
+/* =========================================================
+   DASHBOARD LAYOUT
+   ========================================================= */
+
+.admin-dashboard {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.admin-sidebar {
+    width: 265px;
+    min-height: 100vh;
+
+    background:
+        linear-gradient(
+            180deg,
+            #11110f 0%,
+            #090909 100%
+        );
+
+    border-right: 1px solid var(--border);
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    padding: 32px 20px;
+
+    z-index: 100;
+
+    box-shadow:
+        15px 0 40px rgba(0, 0, 0, 0.35);
+}
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.admin-logo {
+    text-align: center;
+    padding: 10px 5px 35px;
+
+    border-bottom: 1px solid rgba(201, 164, 92, 0.13);
+
+    margin-bottom: 30px;
+}
+
+.admin-logo h1 {
+    font-family: 'Cormorant Garamond', serif;
+
+    font-size: 34px;
+    font-weight: 700;
+
+    letter-spacing: 4px;
+
+    color: var(--gold-light);
+
+    text-shadow:
+        0 0 20px rgba(201, 164, 92, 0.16);
+}
+
+.admin-logo p {
+    margin-top: 4px;
+
+    font-size: 9px;
+    font-weight: 600;
+
+    letter-spacing: 4px;
+
+    color: var(--muted);
+}
+
+/* =========================================================
+   SIDEBAR NAV
+   ========================================================= */
+
+.admin-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-nav-item {
+    width: 100%;
+
+    border: 1px solid transparent;
+
+    background: transparent;
+
+    color: #96928a;
+
+    padding: 14px 17px;
+
+    border-radius: 10px;
+
+    text-align: left;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    letter-spacing: 0.4px;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.admin-nav-item:hover {
+    color: var(--gold-light);
+
+    background: rgba(201, 164, 92, 0.06);
+
+    border-color: rgba(201, 164, 92, 0.12);
+
+    transform: translateX(3px);
+}
+
+.admin-nav-item.active {
+    color: var(--gold-light);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(201, 164, 92, 0.16),
+            rgba(201, 164, 92, 0.04)
+        );
+
+    border-color: rgba(201, 164, 92, 0.25);
+
+    box-shadow:
+        inset 3px 0 0 var(--gold),
+        0 5px 20px rgba(201, 164, 92, 0.05);
+}
+
+/* =========================================================
+   ORDER BADGE
+   ========================================================= */
+
+.order-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 20px;
+    height: 20px;
+
+    padding: 0 6px;
+
+    margin-left: 7px;
+
+    border-radius: 20px;
+
+    background: var(--gold);
+
+    color: #111;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+.admin-logout {
+    position: absolute;
+
+    left: 20px;
+    right: 20px;
+    bottom: 25px;
+
+    padding: 13px;
+
+    border-radius: 9px;
+
+    border: 1px solid rgba(213, 106, 106, 0.25);
+
+    background: rgba(213, 106, 106, 0.05);
+
+    color: #d99090;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.admin-logout:hover {
+    background: rgba(213, 106, 106, 0.12);
+
+    border-color: rgba(213, 106, 106, 0.45);
+
+    color: #efaaaa;
+}
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.admin-main {
+    margin-left: 265px;
+
+    width: calc(100% - 265px);
+
+    min-height: 100vh;
+
+    padding: 35px 42px 60px;
+}
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+
+.admin-topbar {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 38px;
+
+    padding-bottom: 25px;
+
+    border-bottom: 1px solid rgba(201, 164, 92, 0.12);
+}
+
+.admin-label {
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 3px;
+
+    color: var(--gold);
+
+    font-weight: 600;
+}
+
+.admin-user {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 12px;
+
+    color: #aaa69d;
+}
+
+.user-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #67bb82;
+
+    box-shadow:
+        0 0 10px rgba(103, 187, 130, 0.7);
+}
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+
+.admin-section {
+    display: none;
+}
+
+.admin-section.active {
+    display: block;
+}
+
+/* =========================================================
+   WELCOME CARD
+   ========================================================= */
+
+.welcome-card {
+    position: relative;
+
+    padding: 35px;
+
+    border-radius: 16px;
+
+    margin-bottom: 30px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #171510,
+            #0d0d0d
+        );
+
+    border: 1px solid rgba(201, 164, 92, 0.18);
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.welcome-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 250px;
+    height: 250px;
+
+    right: -100px;
+    top: -100px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(201, 164, 92, 0.12);
+}
+
+.welcome-card h2 {
+    font-family: 'Cormorant Garamond', serif;
+
+    font-size: 38px;
+
+    color: var(--white);
+
+    margin-bottom: 7px;
+}
+
+.welcome-card p {
+    font-size: 13px;
+
+    color: var(--muted);
+
+    line-height: 1.7;
+}
+
+/* =========================================================
+   STATISTICS
+   ========================================================= */
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 42px;
+}
+
+.stat-card {
+    position: relative;
+
+    background:
+        linear-gradient(
+            145deg,
+            #141414,
+            #0d0d0d
+        );
+
+    border: 1px solid rgba(201, 164, 92, 0.14);
+
+    border-radius: 14px;
+
+    padding: 22px;
+
+    overflow: hidden;
+
+    transition: all 0.3s ease;
+}
+
+.stat-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
+
+    opacity: 0.5;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+
+    border-color: rgba(201, 164, 92, 0.35);
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.35);
+}
+
+.stat-icon {
+    font-size: 20px;
+
+    color: var(--gold);
+
+    margin-bottom: 15px;
+}
+
+.stat-card h3 {
+    font-size: 26px;
+
+    color: var(--white);
+
+    margin-bottom: 5px;
+}
+
+.stat-card p {
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.5px;
+
+    color: var(--muted);
+}
+
+/* =========================================================
+   SECTION TOP
+   ========================================================= */
+
+.section-top {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 22px;
+}
+
+.section-top h2 {
+    font-family: 'Cormorant Garamond', serif;
+
+    font-size: 32px;
+
+    color: var(--white);
+}
+
+.refresh-button {
+    border: 1px solid rgba(201, 164, 92, 0.3);
+
+    background: rgba(201, 164, 92, 0.05);
+
+    color: var(--gold-light);
+
+    padding: 10px 17px;
+
+    border-radius: 8px;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.refresh-button:hover {
+    background: rgba(201, 164, 92, 0.13);
+
+    border-color: var(--gold);
+
+    box-shadow:
+        0 0 18px rgba(201, 164, 92, 0.08);
+}
+
+/* =========================================================
+   ORDERS CONTAINER
+   ========================================================= */
+
+.orders-container {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+.orders-loading,
+.orders-empty {
+    text-align: center;
+
+    padding: 65px 20px;
+
+    border: 1px dashed rgba(201, 164, 92, 0.2);
+
+    border-radius: 14px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   ORDER CARD
+   ========================================================= */
+
+.order-card {
+    position: relative;
+
+    background:
+        linear-gradient(
+            145deg,
+            #151515,
+            #0c0c0c
+        );
+
+    border: 1px solid rgba(201, 164, 92, 0.15);
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.28);
+
+    transition: all 0.3s ease;
+}
+
+.order-card:hover {
+    border-color: rgba(201, 164, 92, 0.32);
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.38);
+}
+
+/* =========================================================
+   ORDER CARD HEADER
+   ========================================================= */
+
+.order-card-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 18px 22px;
+
+    background:
+        rgba(201, 164, 92, 0.035);
+
+    border-bottom: 1px solid rgba(201, 164, 92, 0.10);
+}
+
+.order-number {
+    color: var(--gold-light);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.order-date {
+    color: var(--muted);
+
+    font-size: 10px;
+
+    margin-top: 5px;
+}
+
+/* =========================================================
+   ORDER STATUS
+   ========================================================= */
+
+.order-status {
+    padding: 7px 13px;
+
+    border-radius: 20px;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    border: 1px solid;
+}
+
+.order-status.pending {
+    color: #e2b96c;
+
+    background: rgba(226, 185, 108, 0.08);
+
+    border-color: rgba(226, 185, 108, 0.25);
+}
+
+.order-status.preparing {
+    color: #dca66c;
+
+    background: rgba(220, 166, 108, 0.08);
+
+    border-color: rgba(220, 166, 108, 0.25);
+}
+
+.order-status.completed {
+    color: var(--green);
+
+    background: rgba(95, 189, 135, 0.08);
+
+    border-color: rgba(95, 189, 135, 0.25);
+}
+
+.order-status.cancelled {
+    color: var(--red);
+
+    background: rgba(213, 106, 106, 0.08);
+
+    border-color: rgba(213, 106, 106, 0.25);
+}
+
+/* =========================================================
+   ORDER BODY
+   ========================================================= */
+
+.order-card-body {
+    display: grid;
+
+    grid-template-columns: 1fr 1.25fr;
+
+    gap: 25px;
+
+    padding: 24px;
+}
+
+/* =========================================================
+   CUSTOMER DETAILS
+   ========================================================= */
+
+.customer-details {
+    border-right: 1px solid rgba(201, 164, 92, 0.10);
+
+    padding-right: 25px;
+}
+
+.customer-details h4,
+.order-items h4 {
+    color: var(--gold);
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 15px;
+}
+
+.customer-details p {
+    font-size: 12px;
+
+    color: #c7c3ba;
+
+    margin-bottom: 10px;
+
+    line-height: 1.6;
+}
+
+.customer-details strong {
+    color: var(--white);
+}
+
+.customer-note {
+    margin-top: 17px;
+
+    padding: 13px;
+
+    background: rgba(201, 164, 92, 0.04);
+
+    border-left: 2px solid var(--gold);
+
+    color: #aaa69d;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+/* =========================================================
+   ORDER ITEMS
+   ========================================================= */
+
+.order-items {
+    min-width: 0;
+}
+
+.order-item {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 11px 0;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item-name {
+    color: #ddd8ce;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.order-item-qty {
+    color: var(--muted);
+
+    font-size: 10px;
+
+    margin-left: 7px;
+}
+
+.order-item-price {
+    color: var(--gold-light);
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+/* =========================================================
+   ORDER FOOTER
+   ========================================================= */
+
+.order-card-footer {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 17px 22px;
+
+    background: rgba(0, 0, 0, 0.18);
+
+    border-top: 1px solid rgba(201, 164, 92, 0.09);
+}
+
+.order-total {
+    font-family: 'Cormorant Garamond', serif;
+
+    font-size: 25px;
+
+    font-weight: 700;
+
+    color: var(--gold-light);
+}
+
+.order-total small {
+    display: block;
+
+    font-family: 'Montserrat', sans-serif;
+
+    font-size: 8px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.5px;
+
+    color: var(--muted);
+
+    margin-bottom: 3px;
+}
+
+/* =========================================================
+   ORDER ACTIONS
+   ========================================================= */
+
+.order-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.status-select {
+    min-width: 145px;
+
+    padding: 10px 13px;
+
+    border-radius: 8px;
+
+    border: 1px solid rgba(201, 164, 92, 0.25);
+
+    background: #111;
+
+    color: var(--gold-light);
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    outline: none;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.status-select:hover,
+.status-select:focus {
+    border-color: var(--gold);
+
+    box-shadow:
+        0 0 15px rgba(201, 164, 92, 0.08);
+}
+
+.status-select option {
+    background: #111;
+
+    color: #eee;
+}
+
+/* =========================================================
+   MENU PLACEHOLDER
+   ========================================================= */
+
+.menu-placeholder {
+    padding: 70px 20px;
+
+    text-align: center;
+
+    border: 1px dashed rgba(201, 164, 92, 0.2);
+
+    border-radius: 14px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: #080808;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #51452f;
+
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold-dark);
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .admin-sidebar {
+        width: 220px;
+    }
+
+    .admin-main {
+        margin-left: 220px;
+
+        width: calc(100% - 220px);
+
+        padding: 30px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .order-card-body {
+        grid-template-columns: 1fr;
+    }
+
+    .customer-details {
+        border-right: none;
+
+        border-bottom: 1px solid rgba(201, 164, 92, 0.10);
+
+        padding-right: 0;
+
+        padding-bottom: 22px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 750px) {
+
+    .admin-dashboard {
+        display: block;
+    }
+
+    .admin-sidebar {
+        position: relative;
+
+        width: 100%;
+
+        min-height: auto;
+
+        padding: 20px 15px;
+
+        border-right: none;
+
+        border-bottom: 1px solid var(--border);
+    }
+
+    .admin-logo {
+        padding-bottom: 20px;
+
+        margin-bottom: 18px;
+    }
+
+    .admin-logo h1 {
+        font-size: 29px;
+    }
+
+    .admin-nav {
+        flex-direction: row;
+
+        overflow-x: auto;
+
+        padding-bottom: 4px;
+    }
+
+    .admin-nav-item {
+        white-space: nowrap;
+
+        width: auto;
+
+        padding: 11px 15px;
+    }
+
+    .admin-logout {
+        position: relative;
+
+        left: auto;
+        right: auto;
+        bottom: auto;
+
+        width: 100%;
+
+        margin-top: 15px;
+    }
+
+    .admin-main {
+        margin-left: 0;
+
+        width: 100%;
+
+        padding: 25px 15px 50px;
+    }
+
+    .admin-topbar {
+        margin-bottom: 25px;
+    }
+
+    .welcome-card {
+        padding: 25px 20px;
+    }
+
+    .welcome-card h2 {
+        font-size: 31px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 17px;
+    }
+
+    .stat-card h3 {
+        font-size: 21px;
+    }
+
+    .section-top {
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .section-top h2 {
+        font-size: 28px;
+    }
+
+    .order-card-header {
+        align-items: flex-start;
+
+        gap: 12px;
+    }
+
+    .order-card-body {
+        padding: 19px;
+    }
+
+    .order-card-footer {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .order-actions {
+        width: 100%;
+    }
+
+    .status-select {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE — SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 450px) {
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-topbar {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+    .order-card-header {
+        flex-direction: column;
+    }
+
+    .order-status {
+        align-self: flex-start;
+    }
+
+    .order-item {
+        align-items: flex-start;
+    }
+}

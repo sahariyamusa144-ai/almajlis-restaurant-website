@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Almajlis - Admin Panel</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f1ea;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .admin-container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #b8860b;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #b8860b;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background: #966f08;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="admin-container">
+
+        <h1>Almajlis Admin Panel</h1>
+
+        <p class="subtitle">
+            Add a new menu item
+        </p>
+
+        <form id="menuForm">
+
+            <div class="form-group">
+                <label for="name">Food Name</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Example: Chicken Mandu"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="price">Price</label>
+
+                <input
+                    type="number"
+                    id="price"
+                    placeholder="Example: 350"
+                    min="0"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="category">Category</label>
+
+                <select id="category" required>
+
+                    <option value="">
+                        Select Category
+                    </option>
+
+                    <option value="Appetizer">
+                        Appetizer
+                    </option>
+
+                    <option value="Main Course">
+                        Main Course
+                    </option>
+
+                    <option value="Chicken">
+                        Chicken
+                    </option>
+
+                    <option value="Beef">
+                        Beef
+                    </option>
+
+                    <option value="Mandu">
+                        Mandu
+                    </option>
+
+                    <option value="Drinks">
+                        Drinks
+                    </option>
+
+                    <option value="Dessert">
+                        Dessert
+                    </option>
+
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="description">Description</label>
+
+                <textarea
+                    id="description"
+                    placeholder="Write food description..."
+                    required
+                ></textarea>
+            </div>
+
+
+            <div class="form-group">
+                <label for="image">Image URL</label>
+
+                <input
+                    type="text"
+                    id="image"
+                    placeholder="Paste food image URL"
+                    required
+                >
+            </div>
+
+
+            <button
+                type="submit"
+                class="save-btn"
+            >
+                Save Menu Item
+            </button>
+
+        </form>
+
+
+        <p id="message"></p>
+
+    </div>
+
+
+    <!-- Admin JavaScript -->
+    <script src="admin.js"></script>
+
+</body>
+
+</html>

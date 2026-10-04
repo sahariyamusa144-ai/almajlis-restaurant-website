@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Almajlis Arabian Restaurant - Authentic Arabian cuisine in Gulshan, Dhaka.">
+
+    <title>Almajlis | Arabian Restaurant</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<!-- ORDER CART -->
+<div class="order-cart" id="orderCart">
+  <div class="order-cart-header">
+    <div>
+      <span class="cart-label">YOUR ORDER</span>
+      <h3>Order Summary</h3>
+    </div>
+    <button class="cart-close" id="cartClose">&times;</button>
+  </div>
+
+  <div class="cart-items" id="cartItems">
+    <div class="empty-cart">
+      <span>🛒</span>
+      <p>Your order is empty</p>
+      <small>Add delicious dishes from our menu.</small>
+    </div>
+  </div>
+
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Total</span>
+      <strong id="cartTotal">৳0</strong>
+    </div>
+
+    <button class="checkout-button" id="checkoutButton">
+      Proceed to Order
+    </button>
+  </div>
+</div>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+
+<button class="floating-cart" id="floatingCart">
+  🛒
+  <span id="cartCount">0</span>
+</button>
+<!-- ORDER SUCCESS ANIMATION -->
+<div class="order-success-overlay" id="orderSuccessOverlay">
+
+  <div class="order-success-box">
+
+    <div class="success-check">
+      <div class="check-circle">
+        ✓
+      </div>
+    </div>
+
+    <div class="success-label">
+      ORDER CONFIRMED
+    </div>
+
+    <h2>
+      Thank You, Sir / Ma'am!
+    </h2>
+
+    <p class="success-main">
+      Your order has been received with pleasure.
+    </p>
+
+    <p class="success-sub">
+      We’re preparing something delicious just for you.
+      <br>
+      We look forward to serving you at <strong>Almajlis</strong>.
+    </p>
+
+    <div class="success-line"></div>
+
+    <p class="success-note">
+      ✦ Your dining experience begins here ✦
+    </p>
+
+  </div>
+
+</div>
+<!-- CUSTOMER ORDER FORM -->
+<div class="order-form-overlay" id="orderFormOverlay">
+
+  <div class="order-form-box">
+
+    <button class="order-form-close" id="orderFormClose">
+      &times;
+    </button>
+
+    <div class="order-form-heading">
+
+      <span>ALMAJLIS</span>
+
+      <h2>Complete Your Order</h2>
+
+      <p>
+        Please provide your details so we can prepare
+        your order with care.
+      </p>
+
+    </div>
+
+
+    <form id="customerOrderForm">
+
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label for="customerName">
+            Full Name
+          </label>
+
+          <input
+            type="text"
+            id="customerName"
+            placeholder="Enter your name"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="customerPhone">
+            Phone Number
+          </label>
+
+          <input
+            type="tel"
+            id="customerPhone"
+            placeholder="01XXXXXXXXX"
+            required
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="customerAddress">
+          Delivery Address
+        </label>
+
+        <textarea
+          id="customerAddress"
+          rows="3"
+          placeholder="Enter your complete delivery address"
+          required
+        ></textarea>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="customerNote">
+          Special Note
+          <span>(Optional)</span>
+        </label>
+
+        <textarea
+          id="customerNote"
+          rows="2"
+          placeholder="Any special request?"
+        ></textarea>
+
+      </div>
+
+
+      <!-- ORDER SUMMARY -->
+
+      <div class="checkout-summary">
+
+        <div class="summary-title">
+          Your Order
+        </div>
+
+        <div id="checkoutItems">
+        </div>
+
+        <div class="checkout-total">
+
+          <span>Total Amount</span>
+
+          <strong id="checkoutTotal">
+            ৳0
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <button
+        type="submit"
+        class="place-order-button"
+        id="placeOrderButton"
+      >
+
+        <span>PLACE ORDER</span>
+
+        <span class="order-arrow">
+          →
+        </span>
+
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+<body>
+
+<!-- =====================================================
+     PRELOADER
+===================================================== -->
+
+<div class="preloader">
+    <div class="loader-content">
+        <div class="loader-logo">
+            <i class="fa-solid fa-utensils"></i>
+        </div>
+
+        <h2>ALMAJLIS</h2>
+        <span>ARABIAN RESTAURANT</span>
+
+        <div class="loader-line"></div>
+    </div>
+</div>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="header">
+
+    <div class="container nav-container">
+
+        <a href="#home" class="logo">
+
+            <span class="logo-symbol">
+                <i class="fa-solid fa-utensils"></i>
+            </span>
+
+            <span class="logo-text">
+                <strong>ALMAJLIS</strong>
+                <small>ARABIAN RESTAURANT</small>
+            </span>
+
+        </a>
+
+
+        <nav class="desktop-nav">
+
+            <a href="#home" class="nav-link active">Home</a>
+            <a href="#about" class="nav-link">Our Story</a>
+            <a href="#menu" class="nav-link">Menu</a>
+            <a href="#gallery" class="nav-link">Gallery</a>
+            <a href="#contact" class="nav-link">Contact</a>
+
+            <a href="#reservation"
+               class="nav-reserve">
+                Reserve a Table
+            </a>
+
+        </nav>
+
+
+        <button class="menu-toggle"
+                aria-label="Open Menu">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     MOBILE MENU
+===================================================== -->
+
+<div class="mobile-menu">
+
+    <button class="mobile-close">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <div class="mobile-menu-inner">
+
+        <div class="mobile-logo">
+            <i class="fa-solid fa-utensils"></i>
+            <span>ALMAJLIS</span>
+        </div>
+
+        <a href="#home">Home</a>
+        <a href="#about">Our Story</a>
+        <a href="#menu">Menu</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#reservation">Reservation</a>
+        <a href="#contact">Contact</a>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero" id="home">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-pattern"></div>
+
+
+    <div class="container hero-container">
+
+        <div class="hero-content">
+
+            <div class="hero-badge">
+                <span></span>
+                AUTHENTIC ARABIAN CUISINE
+                <span></span>
+            </div>
+
+
+            <h1>
+                A Taste of
+                <em>Arabia</em>
+            </h1>
+
+
+            <p class="hero-description">
+                Experience the rich flavours, timeless recipes,
+                and warm hospitality of Arabia in the heart of
+                Gulshan, Dhaka.
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a href="#menu"
+                   class="btn btn-primary">
+
+                    Explore Our Menu
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+
+                <a href="#reservation"
+                   class="btn btn-outline">
+
+                    Reserve a Table
+
+                </a>
+
+            </div>
+
+
+            <div class="hero-info">
+
+                <div class="hero-info-item">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    <div>
+                        <small>LOCATION</small>
+                        <strong>Gulshan 2, Dhaka</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="hero-divider"></div>
+
+
+                <div class="hero-info-item">
+
+                    <i class="fa-regular fa-clock"></i>
+
+                    <div>
+                        <small>OPEN DAILY</small>
+                        <strong>11 AM — 11 PM</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-socials">
+
+            <span>FOLLOW US</span>
+
+            <a href="#" aria-label="Facebook">
+                <i class="fa-brands fa-facebook-f"></i>
+            </a>
+
+            <a href="#" aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+
+            <a href="#" aria-label="TikTok">
+                <i class="fa-brands fa-tiktok"></i>
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <a href="#about" class="hero-scroll">
+
+        <span>SCROLL TO DISCOVER</span>
+
+        <i class="fa-solid fa-arrow-down"></i>
+
+    </a>
+
+</section>
+
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
+
+<section class="section about" id="about">
+
+    <div class="container about-grid">
+
+        <div class="about-images">
+
+            <div class="about-image-main">
+                <img
+                    src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=90"
+                    alt="Arabian food">
+            </div>
+
+
+            <div class="about-image-small">
+                <img
+                    src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=800&q=90"
+                    alt="Restaurant food">
+            </div>
+
+
+            <div class="experience-box">
+
+                <strong>10+</strong>
+
+                <span>
+                    YEARS OF<br>
+                    EXPERIENCE
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="about-content">
+
+            <span class="section-label">
+                OUR STORY
+            </span>
+
+
+            <h2>
+                Where Tradition
+                Meets <em>Taste</em>
+            </h2>
+
+
+            <div class="gold-line"></div>
+
+
+            <p class="lead">
+                Welcome to Almajlis — a place where the
+                authentic flavours of Arabia come alive.
+            </p>
+
+
+            <p>
+                Inspired by the rich culinary traditions of
+                the Arabian Peninsula, we bring together
+                aromatic spices, carefully selected ingredients,
+                and time-honoured cooking techniques.
+            </p>
+
+
+            <p>
+                Every dish is prepared with passion and served
+                with the warmth and hospitality that makes
+                Arabian dining truly special.
+            </p>
+
+
+            <div class="about-signature">
+
+                <div class="signature-icon">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+
+                <div>
+                    <strong>Authentic Arabian Experience</strong>
+                    <span>Made with passion & tradition</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FEATURES
+===================================================== -->
+
+<section class="features">
+
+    <div class="container features-grid">
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                <i class="fa-solid fa-mortar-pestle"></i>
+            </div>
+
+            <div>
+                <h3>Authentic Recipes</h3>
+                <p>Traditional Arabian flavours</p>
+            </div>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                <i class="fa-solid fa-seedling"></i>
+            </div>
+
+            <div>
+                <h3>Fresh Ingredients</h3>
+                <p>Quality in every ingredient</p>
+            </div>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                <i class="fa-solid fa-gem"></i>
+            </div>
+
+            <div>
+                <h3>Premium Experience</h3>
+                <p>Elegant dining atmosphere</p>
+            </div>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+
+            <div>
+                <h3>Made With Love</h3>
+                <p>Passion behind every plate</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     MENU
+===================================================== -->
+
+<section class="section menu-section" id="menu">
+
+    <div class="container">
+
+        <div class="section-heading center">
+
+            <span class="section-label">
+                OUR MENU
+            </span>
+
+            <h2>
+                Signature <em>Flavours</em>
+            </h2>
+
+            <p>
+                Discover dishes inspired by the heart of
+                Arabian cuisine.
+            </p>
+
+        </div>
+
+
+        <div class="menu-tabs">
+
+            <button class="menu-tab active"
+                    data-category="all">
+                All
+            </button>
+
+            <button class="menu-tab"
+                    data-category="mandi">
+                Mandi
+            </button>
+
+            <button class="menu-tab"
+                    data-category="grill">
+                Grills
+            </button>
+
+            <button class="menu-tab"
+                    data-category="rice">
+                Rice
+            </button>
+
+            <button class="menu-tab"
+                    data-category="dessert">
+                Desserts
+            </button>
+
+        </div>
+
+
+        <div class="menu-grid">
+
+
+            <!-- ITEM 1 -->
+
+            <article class="menu-card"
+                     data-category="mandi">
+
+                <div class="menu-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=90"
+                        alt="Chicken Mandi">
+
+                    <span class="menu-tag">
+                        CHEF'S CHOICE
+                    </span>
+
+                </div>
+
+
+                <div class="menu-card-content">
+
+                    <div class="menu-title-row">
+
+                        <h3>Arabian Chicken Mandi</h3>
+
+                        <strong class="price">
+                            ৳ 690
+                        </strong>
+
+                    </div>
+
+                    <p>
+                        Fragrant basmati rice served with
+                        tender slow-cooked chicken.
+                    </p>
+
+                    <button class="menu-button">
+                        <i class="fa-solid fa-plus"></i>
+                        Add to Order
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- ITEM 2 -->
+
+            <article class="menu-card"
+                     data-category="mandi">
+
+                <div class="menu-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=90"
+                        alt="Mutton Mandi">
+
+                    <span class="menu-tag">
+                        POPULAR
+                    </span>
+
+                </div>
+
+
+                <div class="menu-card-content">
+
+                    <div class="menu-title-row">
+
+                        <h3>Mutton Mandi</h3>
+
+                        <strong class="price">
+                            ৳ 890
+                        </strong>
+
+                    </div>
+
+                    <p>
+                        Tender mutton with aromatic rice
+                        and traditional Arabian spices.
+                    </p>
+
+                    <button class="menu-button">
+                        <i class="fa-solid fa-plus"></i>
+                        Add to Order
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- ITEM 3 -->
+
+            <article class="menu-card"
+                     data-category="grill">
+
+                <div class="menu-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=90"
+                        alt="Arabian Grill">
+
+                </div>
+
+
+                <div class="menu-card-content">
+
+                    <div class="menu-title-row">
+
+                        <h3>Mixed Arabian Grill</h3>
+
+                        <strong class="price">
+                            ৳ 990
+                        </strong>
+
+                    </div>
+
+                    <p>
+                        A premium selection of grilled
+                        meats and Arabian spices.
+                    </p>
+
+                    <button class="menu-button">
+                        <i class="fa-solid fa-plus"></i>
+                        Add to Order
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- ITEM 4 -->
+
+            <article class="menu-card"
+                     data-category="rice">
+
+                <div class="menu-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=90"
+                        alt="Arabian Rice">
+
+                </div>
+
+
+                <div class="menu-card-content">
+
+                    <div class="menu-title-row">
+
+                        <h3>Special Arabian Rice</h3>
+
+                        <strong class="price">
+                            ৳ 590
+                        </strong>
+
+                    </div>
+
+                    <p>
+                        Long-grain basmati rice with
+                        fragrant Arabian spices.
+                    </p>
+
+                    <button class="menu-button">
+                        <i class="fa-solid fa-plus"></i>
+                        Add to Order
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- ITEM 5 -->
+
+            <article class="menu-card"
+                     data-category="grill">
+
+                <div class="menu-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=900&q=90"
+                        alt="Grilled Meat">
+
+                </div>
+
+
+                <div class="menu-card-content">
+
+                    <div class="menu-title-row">
+
+                        <h3>Premium Grilled Meat</h3>
+
+                        <strong class="price">
+                            ৳ 950
+                        </strong>
+
+                    </div>
+
+                    <p>
+                        Juicy grilled meat finished with
+                        signature Arabian seasoning.
+                    </p>
+
+                    <button class="menu-button">
+                        <i class="fa-solid fa-plus"></i>
+                        Add to Order
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- ITEM 6 -->
+
+            <article class="menu-card"
+                     data-category="dessert">
+
+                <div class="menu-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=900&q=90"
+                        alt="Arabian Dessert">
+
+                </div>
+
+
+                <div class="menu-card-content">
+
+                    <div class="menu-title-row">
+
+                        <h3>Arabian Dessert</h3>
+
+                        <strong class="price">
+                            ৳ 350
+                        </strong>
+
+                    </div>
+
+                    <p>
+                        A delicate sweet finish inspired
+                        by classic Middle Eastern desserts.
+                    </p>
+
+                    <button class="menu-button">
+                        <i class="fa-solid fa-plus"></i>
+                        Add to Order
+                    </button>
+
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <div class="menu-footer">
+
+            <a href="#reservation"
+               class="btn btn-dark">
+
+                View Full Experience
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     QUOTE
+===================================================== -->
+
+<section class="quote-section">
+
+    <div class="quote-overlay"></div>
+
+    <div class="container quote-content">
+
+        <span class="quote-symbol">
+            “
+        </span>
+
+        <blockquote>
+            Great food is not just about taste.
+            It is about memories, people,
+            culture and moments shared together.
+        </blockquote>
+
+        <div class="quote-line"></div>
+
+        <span class="quote-author">
+            — ALMAJLIS
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     GALLERY
+===================================================== -->
+
+<section class="section gallery" id="gallery">
+
+    <div class="container">
+
+        <div class="section-heading center">
+
+            <span class="section-label">
+                OUR GALLERY
+            </span>
+
+            <h2>
+                A Feast for the <em>Eyes</em>
+            </h2>
+
+            <p>
+                A glimpse into our food, atmosphere and experience.
+            </p>
+
+        </div>
+
+
+        <div class="gallery-grid">
+
+
+            <div class="gallery-item gallery-large">
+
+                <img
+                    src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1200&q=90"
+                    alt="Restaurant food">
+
+                <div class="gallery-overlay">
+                    <i class="fa-solid fa-expand"></i>
+                </div>
+
+            </div>
+
+
+            <div class="gallery-item">
+
+                <img
+                    src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=900&q=90"
+                    alt="Restaurant interior">
+
+                <div class="gallery-overlay">
+                    <i class="fa-solid fa-expand"></i>
+                </div>
+
+            </div>
+
+
+            <div class="gallery-item">
+
+                <img
+                    src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=90"
+                    alt="Fine dining">
+
+                <div class="gallery-overlay">
+                    <i class="fa-solid fa-expand"></i>
+                </div>
+
+            </div>
+
+
+            <div class="gallery-item">
+
+                <img
+                    src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&w=900&q=90"
+                    alt="Arabian dining">
+
+                <div class="gallery-overlay">
+                    <i class="fa-solid fa-expand"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     RESERVATION
+===================================================== -->
+
+<section class="section reservation"
+         id="reservation">
+
+    <div class="container reservation-wrapper">
+
+
+        <div class="reservation-info">
+
+            <span class="section-label">
+                RESERVATION
+            </span>
+
+            <h2>
+                Your Table
+                <em>Awaits</em>
+            </h2>
+
+            <p>
+                Make your dining experience special.
+                Reserve your table and let us take care
+                of the rest.
+            </p>
+
+
+            <div class="reservation-contact">
+
+                <div class="contact-line">
+
+                    <i class="fa-solid fa-phone"></i>
+
+                    <div>
+                        <small>CALL US</small>
+                        <a href="tel:+8801830000233">
+                            +880 1830-000233
+                        </a>
+                    </div>
+
+                </div>
+
+
+                <div class="contact-line">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    <div>
+                        <small>FIND US</small>
+                        <span>
+                            Gulshan 2, Dhaka
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <form class="reservation-form">
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>YOUR NAME</label>
+
+                    <input type="text"
+                           name="name"
+                           placeholder="Enter your name"
+                           required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>PHONE NUMBER</label>
+
+                    <input type="tel"
+                           name="phone"
+                           placeholder="+880"
+                           required>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>DATE</label>
+
+                    <input type="date"
+                           name="date"
+                           required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>TIME</label>
+
+                    <input type="time"
+                           name="time"
+                           required>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>NUMBER OF GUESTS</label>
+
+                <select name="guests" required>
+
+                    <option value="">
+                        Select guests
+                    </option>
+
+                    <option value="1">
+                        1 Person
+                    </option>
+
+                    <option value="2">
+                        2 People
+                    </option>
+
+                    <option value="3">
+                        3 People
+                    </option>
+
+                    <option value="4">
+                        4 People
+                    </option>
+
+                    <option value="5">
+                        5 People
+                    </option>
+
+                    <option value="6">
+                        6 People
+                    </option>
+
+                    <option value="7">
+                        7 People
+                    </option>
+
+                    <option value="8">
+                        8+ People
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>SPECIAL REQUEST</label>
+
+                <textarea
+                    name="request"
+                    rows="4"
+                    placeholder="Birthday, anniversary, special seating..."></textarea>
+
+            </div>
+
+
+            <button type="submit"
+                    class="btn btn-primary form-submit">
+
+                Confirm Reservation
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </button>
+
+
+            <p class="form-note">
+                <i class="fa-solid fa-shield-halved"></i>
+                We will contact you to confirm your reservation.
+            </p>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     LOCATION
+===================================================== -->
+
+<section class="section location"
+         id="contact">
+
+    <div class="container location-grid">
+
+
+        <div class="location-content">
+
+            <span class="section-label">
+                VISIT US
+            </span>
+
+            <h2>
+                Find Us in
+                <em>Gulshan</em>
+            </h2>
+
+            <p>
+                Come and experience authentic Arabian
+                hospitality in one of Dhaka's most vibrant areas.
+            </p>
+
+
+            <div class="address">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+                <div>
+
+                    <strong>Our Address</strong>
+
+                    <span>
+                        27 C/A Faisal Tower,
+                        Road 52, Gulshan 2,
+                        Dhaka, Bangladesh
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <a href="https://maps.app.goo.gl/vMvtiQivzfB8p2jFA"
+               target="_blank"
+               class="map-button">
+
+                Get Directions
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+            </a>
+
+        </div>
+
+
+        <div class="map-container">
+
+            <iframe
+                src="https://www.google.com/maps?q=Gulshan%202%20Dhaka&output=embed"
+                loading="lazy"
+                allowfullscreen>
+            </iframe>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <div class="container footer-top">
+
+
+        <div class="footer-brand">
+
+            <div class="footer-logo">
+
+                <span>
+                    <i class="fa-solid fa-utensils"></i>
+                </span>
+
+                <div>
+                    <strong>ALMAJLIS</strong>
+                    <small>ARABIAN RESTAURANT</small>
+                </div>
+
+            </div>
+
+
+            <p>
+                Authentic Arabian flavours,
+                warm hospitality and unforgettable
+                dining experiences.
+            </p>
+
+
+            <div class="footer-socials">
+
+                <a href="#">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+
+                <a href="#">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+
+                <a href="#">
+                    <i class="fa-brands fa-tiktok"></i>
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>Explore</h3>
+
+            <a href="#home">Home</a>
+            <a href="#about">Our Story</a>
+            <a href="#menu">Our Menu</a>
+            <a href="#gallery">Gallery</a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>Contact</h3>
+
+            <a href="tel:+8801830000233">
+                +880 1830-000233
+            </a>
+
+            <span>
+                Gulshan 2, Dhaka
+            </span>
+
+            <a href="#reservation">
+                Reserve a Table
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>Opening Hours</h3>
+
+            <span>
+                Saturday — Thursday
+            </span>
+
+            <strong>
+                11:00 AM — 11:00 PM
+            </strong>
+
+            <span>
+                Friday
+            </span>
+
+            <strong>
+                1:00 PM — 11:00 PM
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <div class="container footer-bottom-inner">
+
+            <p>
+                © <span class="current-year"></span>
+                Almajlis Arabian Restaurant.
+                All Rights Reserved.
+            </p>
+
+
+            <p class="developer-credit">
+                Developed by
+                <strong>Musa</strong>
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+     BACK TO TOP
+===================================================== -->
+
+<button class="back-to-top"
+        aria-label="Back to top">
+
+    <i class="fa-solid fa-arrow-up"></i>
+
+</button>
+
+
+<!-- =====================================================
+     SUCCESS MODAL
+===================================================== -->
+
+<div class="modal">
+
+    <div class="modal-box">
+
+        <button class="modal-close">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+
+        <div class="success-icon">
+
+            <i class="fa-solid fa-check"></i>
+
+        </div>
+
+
+        <span class="section-label">
+            THANK YOU
+        </span>
+
+
+        <h2>
+            Reservation
+            <em>Received</em>
+        </h2>
+
+
+        <p>
+            Your reservation request has been received.
+            Our team will contact you shortly to confirm
+            your table.
+        </p>
+
+
+        <button class="btn btn-primary modal-ok">
+            Perfect
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>

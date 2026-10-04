@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Almajlis Admin Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="admin.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <aside class="admin-sidebar">
+
+        <div class="admin-logo">
+
+            <span>ALMAJLIS</span>
+
+            <small>ADMIN PANEL</small>
+
+        </div>
+
+
+        <nav class="admin-nav">
+
+            <button
+                class="admin-nav-item active"
+                data-section="dashboardSection"
+            >
+                <span>⌂</span>
+                Dashboard
+            </button>
+
+
+            <button
+                class="admin-nav-item"
+                data-section="ordersSection"
+            >
+                <span>◈</span>
+                Orders
+
+                <b
+                    class="order-badge"
+                    id="orderBadge"
+                >
+                    0
+                </b>
+
+            </button>
+
+
+            <button
+                class="admin-nav-item"
+                data-section="menuSection"
+            >
+                <span>☷</span>
+                Menu
+            </button>
+
+        </nav>
+
+
+        <button
+            class="admin-logout"
+            id="logoutButton"
+        >
+            Logout
+        </button>
+
+    </aside>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main class="admin-main">
+
+
+        <!-- =========================
+             TOP BAR
+        ========================= -->
+
+        <header class="admin-topbar">
+
+            <div>
+
+                <span class="admin-label">
+                    ALMAJLIS RESTAURANT
+                </span>
+
+                <h1 id="pageTitle">
+                    Dashboard
+                </h1>
+
+            </div>
+
+
+            <div class="admin-user">
+
+                <span class="user-dot"></span>
+
+                Moderator
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =========================
+             DASHBOARD SECTION
+        ========================= -->
+
+        <section
+            class="admin-section active"
+            id="dashboardSection"
+        >
+
+            <div class="welcome-card">
+
+                <span>
+                    WELCOME BACK
+                </span>
+
+                <h2>
+                    Almajlis
+                    <em>Management</em>
+                </h2>
+
+                <p>
+                    Manage your restaurant,
+                    menu and customer orders
+                    from one place.
+                </p>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">
+                        ◈
+                    </span>
+
+                    <div>
+
+                        <small>
+                            TOTAL ORDERS
+                        </small>
+
+                        <strong
+                            id="totalOrders"
+                        >
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">
+                        ◷
+                    </span>
+
+                    <div>
+
+                        <small>
+                            PENDING
+                        </small>
+
+                        <strong
+                            id="pendingOrders"
+                        >
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <small>
+                            COMPLETED
+                        </small>
+
+                        <strong
+                            id="completedOrders"
+                        >
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">
+                        ৳
+                    </span>
+
+                    <div>
+
+                        <small>
+                            TOTAL SALES
+                        </small>
+
+                        <strong
+                            id="totalSales"
+                        >
+                            ৳0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             ORDERS SECTION
+        ========================= -->
+
+        <section
+            class="admin-section"
+            id="ordersSection"
+        >
+
+            <div class="section-top">
+
+                <div>
+
+                    <span class="admin-label">
+                        CUSTOMER ORDERS
+                    </span>
+
+                    <h2>
+                        Order
+                        <em>Management</em>
+                    </h2>
+
+                </div>
+
+
+                <button
+                    class="refresh-button"
+                    id="refreshOrders"
+                >
+                    ↻ Refresh
+                </button>
+
+            </div>
+
+
+            <div
+                class="orders-container"
+                id="ordersContainer"
+            >
+
+                <div class="orders-loading">
+
+                    Loading orders...
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             MENU SECTION
+        ========================= -->
+
+        <section
+            class="admin-section"
+            id="menuSection"
+        >
+
+            <div class="section-top">
+
+                <div>
+
+                    <span class="admin-label">
+                        RESTAURANT MENU
+                    </span>
+
+                    <h2>
+                        Menu
+                        <em>Management</em>
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="menu-placeholder">
+
+                <span>☷</span>
+
+                <h3>
+                    Menu Management
+                </h3>
+
+                <p>
+                    Your existing menu management
+                    system is available here.
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <script src="dashboard.js"></script>
+
+</body>
+
+</html>
