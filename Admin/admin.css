@@ -1140,3 +1140,856 @@ input {
         align-items: flex-start;
     }
 }
+/* =========================================================
+   ALMAJLIS MENU MANAGEMENT
+   ADD MENU + PHOTO UPLOAD
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   MENU SECTION HEADER
+   --------------------------------------------------------- */
+
+#menuSection .section-top {
+    margin-bottom: 25px;
+}
+
+#menuSection .section-top h2 {
+    color: var(--white);
+}
+
+#addMenuBtn {
+    border: 1px solid rgba(201, 164, 92, 0.35);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(201, 164, 92, 0.16),
+            rgba(201, 164, 92, 0.05)
+        );
+    color: var(--gold-light);
+    padding: 11px 18px;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#addMenuBtn:hover {
+    background: rgba(201, 164, 92, 0.20);
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(201, 164, 92, 0.10);
+}
+
+
+/* =========================================================
+   MENU FORM
+   ========================================================= */
+
+#menuFormCard {
+    background:
+        linear-gradient(
+            145deg,
+            #151515,
+            #0d0d0d
+        );
+
+    border: 1px solid rgba(201, 164, 92, 0.18);
+
+    border-radius: 15px;
+
+    padding: 28px;
+
+    margin-bottom: 30px;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.30);
+}
+
+
+/* ---------------------------------------------------------
+   FORM TITLE
+   --------------------------------------------------------- */
+
+#menuFormTitle {
+    font-family: 'Cormorant Garamond', serif;
+
+    font-size: 28px;
+
+    color: var(--white);
+
+    margin-bottom: 25px;
+}
+
+
+/* ---------------------------------------------------------
+   FORM GRID
+   --------------------------------------------------------- */
+
+#menuForm {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+
+/* ---------------------------------------------------------
+   FORM GROUP
+   --------------------------------------------------------- */
+
+#menuForm .form-group {
+    display: flex;
+
+    flex-direction: column;
+}
+
+#menuForm .form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+#menuForm label {
+    color: var(--gold);
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 8px;
+}
+
+
+/* ---------------------------------------------------------
+   INPUTS
+   --------------------------------------------------------- */
+
+#menuForm input,
+#menuForm select,
+#menuForm textarea {
+
+    width: 100%;
+
+    padding: 12px 14px;
+
+    background: #0b0b0b;
+
+    color: var(--white);
+
+    border: 1px solid rgba(201, 164, 92, 0.18);
+
+    border-radius: 8px;
+
+    outline: none;
+
+    font-size: 12px;
+
+    transition: all 0.3s ease;
+}
+
+#menuForm input::placeholder,
+#menuForm textarea::placeholder {
+    color: #68655e;
+}
+
+#menuForm input:focus,
+#menuForm select:focus,
+#menuForm textarea:focus {
+
+    border-color: var(--gold);
+
+    background: #101010;
+
+    box-shadow:
+        0 0 18px rgba(201, 164, 92, 0.06);
+}
+
+#menuForm textarea {
+    min-height: 105px;
+
+    resize: vertical;
+
+    line-height: 1.6;
+}
+
+#menuForm select {
+    cursor: pointer;
+}
+
+#menuForm select option {
+    background: #111;
+
+    color: #eee;
+}
+
+
+/* =========================================================
+   PHOTO UPLOAD
+   ========================================================= */
+
+.menu-image-upload {
+
+    position: relative;
+
+    border: 1px dashed rgba(201, 164, 92, 0.30);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(201, 164, 92, 0.04),
+            rgba(0, 0, 0, 0.20)
+        );
+
+    border-radius: 12px;
+
+    padding: 25px;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.menu-image-upload:hover {
+
+    border-color: var(--gold);
+
+    background:
+        rgba(201, 164, 92, 0.07);
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.20);
+}
+
+.menu-image-upload-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    margin: 0 auto 12px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        rgba(201, 164, 92, 0.08);
+
+    border: 1px solid rgba(201, 164, 92, 0.20);
+
+    color: var(--gold);
+
+    font-size: 23px;
+}
+
+.menu-image-upload strong {
+
+    display: block;
+
+    color: var(--gold-light);
+
+    font-size: 12px;
+
+    margin-bottom: 6px;
+}
+
+.menu-image-upload span {
+
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   IMAGE PREVIEW
+   ========================================================= */
+
+#imagePreviewWrapper {
+
+    margin-top: 15px;
+
+    position: relative;
+
+    width: 210px;
+}
+
+#menuImagePreview {
+
+    width: 210px;
+
+    height: 145px;
+
+    object-fit: cover;
+
+    display: block;
+
+    border-radius: 10px;
+
+    border: 1px solid rgba(201, 164, 92, 0.25);
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.30);
+}
+
+
+/* ---------------------------------------------------------
+   REMOVE IMAGE
+   --------------------------------------------------------- */
+
+#removeImageBtn {
+
+    margin-top: 9px;
+
+    border: 1px solid rgba(213, 106, 106, 0.25);
+
+    background: rgba(213, 106, 106, 0.06);
+
+    color: #d99090;
+
+    padding: 7px 11px;
+
+    border-radius: 7px;
+
+    font-size: 10px;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+#removeImageBtn:hover {
+
+    background: rgba(213, 106, 106, 0.13);
+
+    border-color: rgba(213, 106, 106, 0.45);
+
+    color: #efaaaa;
+}
+
+
+/* =========================================================
+   MENU FORM ACTIONS
+   ========================================================= */
+
+#menuForm .form-actions {
+
+    grid-column: 1 / -1;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding-top: 5px;
+}
+
+
+/* ---------------------------------------------------------
+   SAVE BUTTON
+   --------------------------------------------------------- */
+
+#saveMenuBtn {
+
+    border: 1px solid rgba(201, 164, 92, 0.35);
+
+    background:
+        linear-gradient(
+            135deg,
+            #c9a45c,
+            #92743a
+        );
+
+    color: #111;
+
+    padding: 11px 22px;
+
+    border-radius: 8px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+#saveMenuBtn:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 25px rgba(201, 164, 92, 0.20);
+}
+
+
+/* ---------------------------------------------------------
+   CANCEL BUTTON
+   --------------------------------------------------------- */
+
+#cancelMenuBtn,
+#closeMenuFormBtn {
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+
+    background: rgba(255, 255, 255, 0.04);
+
+    color: #aaa69d;
+
+    padding: 11px 18px;
+
+    border-radius: 8px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+#cancelMenuBtn:hover,
+#closeMenuFormBtn:hover {
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: white;
+}
+
+
+/* =========================================================
+   MENU LIST
+   ========================================================= */
+
+#adminMenuList {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   ADMIN MENU CARD
+   ========================================================= */
+
+.admin-menu-card {
+
+    position: relative;
+
+    background:
+        linear-gradient(
+            145deg,
+            #151515,
+            #0d0d0d
+        );
+
+    border: 1px solid rgba(201, 164, 92, 0.14);
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.28);
+
+    transition: all 0.3s ease;
+}
+
+.admin-menu-card:hover {
+
+    transform: translateY(-5px);
+
+    border-color:
+        rgba(201, 164, 92, 0.35);
+
+    box-shadow:
+        0 20px 45px rgba(0, 0, 0, 0.40);
+}
+
+
+/* =========================================================
+   MENU CARD IMAGE
+   ========================================================= */
+
+.admin-menu-card img,
+.admin-menu-image {
+
+    width: 100%;
+
+    height: 215px;
+
+    object-fit: cover;
+
+    display: block;
+
+    background: #111;
+
+    transition: transform 0.5s ease;
+}
+
+.admin-menu-card:hover img,
+.admin-menu-card:hover .admin-menu-image {
+
+    transform: scale(1.04);
+}
+
+
+/* =========================================================
+   MENU CARD CONTENT
+   ========================================================= */
+
+.admin-menu-info {
+
+    padding: 19px;
+}
+
+
+/* ---------------------------------------------------------
+   CATEGORY
+   --------------------------------------------------------- */
+
+.admin-menu-category {
+
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    margin-bottom: 9px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(201, 164, 92, 0.08);
+
+    border:
+        1px solid rgba(201, 164, 92, 0.15);
+
+    color: var(--gold);
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.3px;
+}
+
+
+/* ---------------------------------------------------------
+   NAME
+   --------------------------------------------------------- */
+
+.admin-menu-name {
+
+    font-family:
+        'Cormorant Garamond',
+        serif;
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+    color: var(--white);
+
+    margin-bottom: 5px;
+}
+
+
+/* ---------------------------------------------------------
+   PRICE
+   --------------------------------------------------------- */
+
+.admin-menu-price {
+
+    font-family:
+        'Cormorant Garamond',
+        serif;
+
+    font-size: 21px;
+
+    font-weight: 700;
+
+    color: var(--gold-light);
+
+    margin-bottom: 9px;
+}
+
+
+/* ---------------------------------------------------------
+   DESCRIPTION
+   --------------------------------------------------------- */
+
+.admin-menu-description {
+
+    color: #85827b;
+
+    font-size: 10px;
+
+    line-height: 1.7;
+
+    min-height: 35px;
+
+    margin-bottom: 14px;
+}
+
+
+/* =========================================================
+   MENU ACTIONS
+   ========================================================= */
+
+.admin-menu-actions {
+
+    display: flex;
+
+    gap: 8px;
+
+    padding-top: 13px;
+
+    border-top:
+        1px solid rgba(255, 255, 255, 0.055);
+}
+
+.admin-menu-actions button {
+
+    flex: 1;
+
+    padding: 9px 10px;
+
+    border-radius: 7px;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+}
+
+
+/* ---------------------------------------------------------
+   EDIT
+   --------------------------------------------------------- */
+
+.edit-menu-btn {
+
+    border:
+        1px solid rgba(201, 164, 92, 0.20);
+
+    background:
+        rgba(201, 164, 92, 0.06);
+
+    color: var(--gold-light);
+}
+
+.edit-menu-btn:hover {
+
+    background:
+        rgba(201, 164, 92, 0.14);
+
+    border-color:
+        rgba(201, 164, 92, 0.40);
+}
+
+
+/* ---------------------------------------------------------
+   DELETE
+   --------------------------------------------------------- */
+
+.delete-menu-btn {
+
+    border:
+        1px solid rgba(213, 106, 106, 0.20);
+
+    background:
+        rgba(213, 106, 106, 0.05);
+
+    color: #d99090;
+}
+
+.delete-menu-btn:hover {
+
+    background:
+        rgba(213, 106, 106, 0.12);
+
+    border-color:
+        rgba(213, 106, 106, 0.40);
+
+    color: #efaaaa;
+}
+
+
+/* =========================================================
+   MENU COUNT
+   ========================================================= */
+
+#menuCount {
+
+    color: var(--gold);
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   MENU EMPTY STATE
+   ========================================================= */
+
+#adminMenuList .menu-empty {
+
+    grid-column: 1 / -1;
+
+    padding: 65px 20px;
+
+    text-align: center;
+
+    border:
+        1px dashed rgba(201, 164, 92, 0.20);
+
+    border-radius: 14px;
+
+    color: var(--muted);
+
+    background:
+        rgba(201, 164, 92, 0.02);
+}
+
+#adminMenuList .menu-empty h3 {
+
+    font-family:
+        'Cormorant Garamond',
+        serif;
+
+    font-size: 25px;
+
+    color: var(--gold-light);
+
+    margin-bottom: 7px;
+}
+
+
+/* =========================================================
+   MENU RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    #adminMenuList {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+/* =========================================================
+   MENU RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 750px) {
+
+    #menuForm {
+
+        grid-template-columns: 1fr;
+    }
+
+    #menuForm .form-group.full-width {
+
+        grid-column: auto;
+    }
+
+    #menuForm .form-actions {
+
+        grid-column: auto;
+
+        flex-direction: column;
+    }
+
+    #saveMenuBtn,
+    #cancelMenuBtn,
+    #closeMenuFormBtn {
+
+        width: 100%;
+    }
+
+    #adminMenuList {
+
+        grid-template-columns: 1fr;
+    }
+
+    #menuFormCard {
+
+        padding: 20px;
+    }
+
+    #menuImagePreview {
+
+        width: 100%;
+
+        max-width: 260px;
+
+        height: 180px;
+    }
+
+    #imagePreviewWrapper {
+
+        width: 100%;
+    }
+}
+
+
+/* =========================================================
+   MENU RESPONSIVE — SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 450px) {
+
+    #menuSection .section-top {
+
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    #addMenuBtn {
+
+        width: 100%;
+    }
+
+    .admin-menu-card img,
+    .admin-menu-image {
+
+        height: 200px;
+    }
+
+    .admin-menu-info {
+
+        padding: 16px;
+    }
+}

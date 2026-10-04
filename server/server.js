@@ -7,7 +7,47 @@ const path = require("path");
 const session = require("express-session");
 const bcrypt = require("bcryptjs");
 const Database = require("better-sqlite3");
+const multer = require("multer");
+const fs = require("fs");
 
+// Upload folder
+const uploadDir = path.join(__dirname, "..", "uploads");
+
+// Folder না থাকলে তৈরি করবে
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Multer storage
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadDir);
+    },
+
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        const uniqueName =
+            Date.now() + "-" + Math.round(Math.random() * 1E9) + ext;
+
+        cb(null, uniqueName);
+    }
+});
+
+// Only image files
+const upload = multer({
+    storage: storage,
+
+    fileFilter: function (req, file, cb) {
+        const allowedTypes = /jpeg|jpg|png|webp/;
+        const ext = path.extname(file.originalname).toLowerCase();
+
+        if (allowedTypes.test(ext)) {
+            cb(null, true);
+        } else {
+            cb(new Error("Only JPG, JPEG, PNG and WEBP images are allowed."));
+        }
+    }
+});
 const app = express();
 const PORT = 3000;
 
@@ -62,6 +102,7 @@ db.prepare(`
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/uploads", express.static(uploadDir));
 app.use(
     session({
         secret: "almajlis-secret-key-change-later",
@@ -202,39 +243,16 @@ app.post("/api/logout", (req, res) => {
 // PUBLIC
 // ======================================================
 
-app.get("/api/menu", (req, res) => {
-
-    try {
-
-        const menu = db.prepare(`
-            SELECT *
-            FROM menu
-            ORDER BY id DESC
-        `).all();
-
-        res.json(menu);
-
-    } catch (error) {
-
-        console.error("MENU ERROR:", error);
-
-        res.status(500).json({
-            success: false,
-            message: "Could not load menu."
-        });
-
-    }
-
-});
-
 // ======================================================
 // ADD MENU ITEM
 // ADMIN ONLY
+// WITH PHOTO UPLOAD
 // ======================================================
 
 app.post(
     "/api/menu",
     requireLogin,
+    upload.single("image"),
     (req, res) => {
 
         try {
@@ -243,8 +261,7 @@ app.post(
                 name,
                 price,
                 category,
-                description,
-                image
+                description
             } = req.body;
 
             if (
@@ -253,6 +270,12 @@ app.post(
                 !category
             ) {
 
+                // যদি validation fail করে এবং photo upload হয়ে থাকে,
+                // তাহলে uploaded photo delete করে দেবে
+                if (req.file) {
+                    fs.unlinkSync(req.file.path);
+                }
+
                 return res.status(400).json({
                     success: false,
                     message:
@@ -260,6 +283,11 @@ app.post(
                 });
 
             }
+
+            // Uploaded image path
+            const image = req.file
+                ? `/uploads/${req.file.filename}`
+                : "";
 
             const result = db.prepare(`
                 INSERT INTO menu
@@ -276,17 +304,31 @@ app.post(
                 Number(price),
                 category,
                 description || "",
-                image || ""
+                image
             );
 
             res.json({
                 success: true,
-                id: result.lastInsertRowid
+                message: "Menu item added successfully.",
+                id: result.lastInsertRowid,
+                image: image
             });
 
         } catch (error) {
 
             console.error("ADD MENU ERROR:", error);
+
+            // Error হলে uploaded photo delete
+            if (req.file) {
+                try {
+                    fs.unlinkSync(req.file.path);
+                } catch (deleteError) {
+                    console.error(
+                        "IMAGE DELETE ERROR:",
+                        deleteError
+                    );
+                }
+            }
 
             res.status(500).json({
                 success: false,
@@ -302,7 +344,226 @@ app.post(
 // CUSTOMER ORDER
 // PUBLIC
 // ======================================================
+// ======================================================
+// EDIT MENU ITEM
+// ADMIN ONLY
+// ======================================================
 
+app.put(
+    "/api/menu/:id",
+    requireLogin,
+    upload.single("image"),
+    (req, res) => {
+
+        try {
+
+            const id = Number(req.params.id);
+
+            const {
+                name,
+                price,
+                category,
+                description
+            } = req.body;
+
+            if (
+                !id ||
+                !name ||
+                price === undefined ||
+                !category
+            ) {
+
+                if (req.file) {
+                    fs.unlinkSync(req.file.path);
+                }
+
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Name, price and category are required."
+                });
+
+            }
+
+            // Find existing menu item
+            const existing = db.prepare(`
+                SELECT *
+                FROM menu
+                WHERE id = ?
+            `).get(id);
+
+            if (!existing) {
+
+                if (req.file) {
+                    fs.unlinkSync(req.file.path);
+                }
+
+                return res.status(404).json({
+                    success: false,
+                    message: "Menu item not found."
+                });
+
+            }
+
+            // Keep old image if no new image uploaded
+            let image = existing.image || "";
+
+            // If new image uploaded
+            if (req.file) {
+
+                image = `/uploads/${req.file.filename}`;
+
+                // Delete old uploaded image
+                if (
+                    existing.image &&
+                    existing.image.startsWith("/uploads/")
+                ) {
+
+                    const oldImagePath = path.join(
+                        __dirname,
+                        "..",
+                        existing.image
+                    );
+
+                    if (fs.existsSync(oldImagePath)) {
+                        fs.unlinkSync(oldImagePath);
+                    }
+
+                }
+
+            }
+
+            db.prepare(`
+                UPDATE menu
+                SET
+                    name = ?,
+                    price = ?,
+                    category = ?,
+                    description = ?,
+                    image = ?
+                WHERE id = ?
+            `).run(
+                name,
+                Number(price),
+                category,
+                description || "",
+                image,
+                id
+            );
+
+            res.json({
+                success: true,
+                message: "Menu item updated successfully.",
+                image: image
+            });
+
+        } catch (error) {
+
+            console.error("EDIT MENU ERROR:", error);
+
+            if (req.file) {
+                try {
+                    fs.unlinkSync(req.file.path);
+                } catch (deleteError) {
+                    console.error(
+                        "IMAGE DELETE ERROR:",
+                        deleteError
+                    );
+                }
+            }
+
+            res.status(500).json({
+                success: false,
+                message: "Could not update menu item."
+            });
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// DELETE MENU ITEM
+// ADMIN ONLY
+// ======================================================
+
+app.delete(
+    "/api/menu/:id",
+    requireLogin,
+    (req, res) => {
+
+        try {
+
+            const id = Number(req.params.id);
+
+            if (!id) {
+
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid menu ID."
+                });
+
+            }
+
+            // Find menu item first
+            const existing = db.prepare(`
+                SELECT *
+                FROM menu
+                WHERE id = ?
+            `).get(id);
+
+            if (!existing) {
+
+                return res.status(404).json({
+                    success: false,
+                    message: "Menu item not found."
+                });
+
+            }
+
+            // Delete database record
+            db.prepare(`
+                DELETE FROM menu
+                WHERE id = ?
+            `).run(id);
+
+            // Delete uploaded image
+            if (
+                existing.image &&
+                existing.image.startsWith("/uploads/")
+            ) {
+
+                const imagePath = path.join(
+                    __dirname,
+                    "..",
+                    existing.image
+                );
+
+                if (fs.existsSync(imagePath)) {
+                    fs.unlinkSync(imagePath);
+                }
+
+            }
+
+            res.json({
+                success: true,
+                message: "Menu item deleted successfully."
+            });
+
+        } catch (error) {
+
+            console.error("DELETE MENU ERROR:", error);
+
+            res.status(500).json({
+                success: false,
+                message: "Could not delete menu item."
+            });
+
+        }
+
+    }
+);
 app.post("/api/orders", (req, res) => {
 
     try {

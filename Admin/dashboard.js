@@ -1,541 +1,1121 @@
-/* =========================
-   ALMAJLIS ADMIN DASHBOARD
-========================= */
+// ======================================================
+// ALMAJLIS ADMIN DASHBOARD
+// Dashboard + Orders + Menu Management
+// ======================================================
 
-const navItems =
-    document.querySelectorAll(
-        ".admin-nav-item"
-    );
+document.addEventListener("DOMContentLoaded", () => {
 
-const sections =
-    document.querySelectorAll(
-        ".admin-section"
-    );
+    // ======================================================
+    // ELEMENTS
+    // ======================================================
 
-const pageTitle =
-    document.getElementById(
-        "pageTitle"
-    );
+    const navItems =
+        document.querySelectorAll(".admin-nav-item");
 
+    const sections =
+        document.querySelectorAll(".admin-section");
 
-/* =========================
-   NAVIGATION
-========================= */
+    const pageTitle =
+        document.getElementById("pageTitle");
 
-navItems.forEach(button => {
+    const logoutButton =
+        document.getElementById("logoutButton");
 
-    button.addEventListener(
-        "click",
-        () => {
+    const refreshOrdersButton =
+        document.getElementById("refreshOrders");
 
-            const sectionId =
-                button.dataset.section;
+    const ordersContainer =
+        document.getElementById("ordersContainer");
 
+    const orderBadge =
+        document.getElementById("orderBadge");
 
-            navItems.forEach(item => {
+    const totalOrders =
+        document.getElementById("totalOrders");
 
-                item.classList.remove(
-                    "active"
-                );
+    const pendingOrders =
+        document.getElementById("pendingOrders");
 
-            });
+    const completedOrders =
+        document.getElementById("completedOrders");
 
-
-            sections.forEach(section => {
-
-                section.classList.remove(
-                    "active"
-                );
-
-            });
+    const totalSales =
+        document.getElementById("totalSales");
 
 
-            button.classList.add(
-                "active"
-            );
+    // ======================================================
+    // MENU ELEMENTS
+    // ======================================================
 
+    const addMenuBtn =
+        document.getElementById("addMenuBtn");
 
-            const target =
-                document.getElementById(
-                    sectionId
-                );
+    const menuFormCard =
+        document.getElementById("menuFormCard");
 
+    const menuForm =
+        document.getElementById("menuForm");
 
-            if (target) {
+    const menuFormTitle =
+        document.getElementById("menuFormTitle");
 
-                target.classList.add(
-                    "active"
-                );
+    const menuId =
+        document.getElementById("menuId");
 
-            }
+    const menuName =
+        document.getElementById("menuName");
 
+    const menuPrice =
+        document.getElementById("menuPrice");
 
-            if (
-                sectionId ===
-                "ordersSection"
-            ) {
+    const menuCategory =
+        document.getElementById("menuCategory");
 
-                pageTitle.textContent =
-                    "Orders";
+    const menuDescription =
+        document.getElementById("menuDescription");
 
-                loadOrders();
+    const menuImage =
+        document.getElementById("menuImage");
 
-            }
-
-
-            else if (
-                sectionId ===
-                "menuSection"
-            ) {
-
-                pageTitle.textContent =
-                    "Menu";
-
-            }
-
-
-            else {
-
-                pageTitle.textContent =
-                    "Dashboard";
-
-            }
-
-        }
-    );
-
-});
-
-
-/* =========================
-   LOAD ORDERS
-========================= */
-
-async function loadOrders() {
-
-    const container =
+    const imagePreviewWrapper =
         document.getElementById(
-            "ordersContainer"
+            "imagePreviewWrapper"
         );
 
-
-    container.innerHTML = `
-        <div class="orders-loading">
-            Loading orders...
-        </div>
-    `;
-
-
-    try {
-
-        const response =
-            await fetch(
-                "/api/orders"
-            );
-
-
-        if (
-            response.status === 401
-        ) {
-
-            window.location.href =
-                "login.html";
-
-            return;
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        if (!data.success) {
-
-            throw new Error(
-                data.message ||
-                "Failed to load orders."
-            );
-
-        }
-
-
-        displayOrders(
-            data.orders
-        );
-
-
-        updateStatistics(
-            data.orders
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Orders error:",
-            error
-        );
-
-
-        container.innerHTML = `
-            <div class="orders-empty">
-                <span>!</span>
-                <h3>
-                    Could not load orders
-                </h3>
-                <p>
-                    Please make sure the server
-                    is running.
-                </p>
-            </div>
-        `;
-
-    }
-
-}
-
-
-/* =========================
-   DISPLAY ORDERS
-========================= */
-
-function displayOrders(
-    orders
-) {
-
-    const container =
+    const menuImagePreview =
         document.getElementById(
-            "ordersContainer"
+            "menuImagePreview"
+        );
+
+    const removeImageBtn =
+        document.getElementById(
+            "removeImageBtn"
+        );
+
+    const cancelMenuBtn =
+        document.getElementById(
+            "cancelMenuBtn"
+        );
+
+    const closeMenuFormBtn =
+        document.getElementById(
+            "closeMenuFormBtn"
+        );
+
+    const saveMenuBtn =
+        document.getElementById(
+            "saveMenuBtn"
+        );
+
+    const adminMenuList =
+        document.getElementById(
+            "adminMenuList"
+        );
+
+    const menuCount =
+        document.getElementById(
+            "menuCount"
         );
 
 
-    if (
-        !orders ||
-        orders.length === 0
-    ) {
+    // ======================================================
+    // NAVIGATION
+    // ======================================================
 
-        container.innerHTML = `
-            <div class="orders-empty">
+    navItems.forEach(button => {
 
-                <span>◈</span>
+        button.addEventListener(
+            "click",
+            () => {
 
-                <h3>
-                    No Orders Yet
-                </h3>
+                const target =
+                    button.dataset.section;
 
-                <p>
-                    Customer orders will appear
-                    here when they place an order.
-                </p>
+                // Remove active from all
+                navItems.forEach(item => {
+                    item.classList.remove("active");
+                });
 
-            </div>
-        `;
+                sections.forEach(section => {
+                    section.classList.remove("active");
+                });
 
-        return;
+                // Activate clicked button
+                button.classList.add("active");
 
-    }
+                const targetSection =
+                    document.getElementById(target);
 
-
-    container.innerHTML = "";
-
-
-    orders.forEach(order => {
-
-        const card =
-            document.createElement(
-                "div"
-            );
-
-
-        card.className =
-            "order-card";
-
-
-        const orderDate =
-            new Date(
-                order.created_at
-            );
-
-
-        const formattedDate =
-            orderDate.toLocaleString(
-                "en-BD",
-                {
-                    dateStyle:
-                        "medium",
-
-                    timeStyle:
-                        "short"
+                if (targetSection) {
+                    targetSection.classList.add("active");
                 }
-            );
 
+                // Change title
+                if (pageTitle) {
 
-        let itemsHTML = "";
-
-
-        order.items.forEach(
-            item => {
-
-                const itemTotal =
-                    item.price *
-                    item.quantity;
-
-
-                itemsHTML += `
-                    <div class="order-item">
-
-                        <span>
-
-                            ${escapeHTML(
-                                item.name
-                            )}
-
-                            <small>
-                                × ${item.quantity}
-                            </small>
-
-                        </span>
-
-                        <strong>
-                            ৳${itemTotal.toLocaleString()}
-                        </strong>
-
-                    </div>
-                `;
-
-            }
-        );
-
-
-        card.innerHTML = `
-
-            <div class="order-card-header">
-
-                <div>
-
-                    <span class="order-number">
-                        ORDER #${order.id}
-                    </span>
-
-                    <span class="order-date">
-                        ${formattedDate}
-                    </span>
-
-                </div>
-
-
-                <span
-                    class="order-status ${getStatusClass(order.status)}"
-                >
-                    ${escapeHTML(order.status)}
-                </span>
-
-            </div>
-
-
-            <div class="order-card-body">
-
-
-                <div class="customer-details">
-
-                    <h3>
-                        ${escapeHTML(
-                            order.customer_name
-                        )}
-                    </h3>
-
-
-                    <p>
-                        📞
-                        ${escapeHTML(
-                            order.phone
-                        )}
-                    </p>
-
-
-                    <p>
-                        📍
-                        ${escapeHTML(
-                            order.address
-                        )}
-                    </p>
-
-
-                    ${
-                        order.note
-                        ? `
-                        <p class="customer-note">
-                            ✦
-                            ${escapeHTML(
-                                order.note
-                            )}
-                        </p>
-                        `
-                        : ""
+                    if (
+                        target === "dashboardSection"
+                    ) {
+                        pageTitle.textContent =
+                            "Dashboard";
                     }
 
-                </div>
+                    else if (
+                        target === "ordersSection"
+                    ) {
+                        pageTitle.textContent =
+                            "Orders";
+                    }
 
+                    else if (
+                        target === "menuSection"
+                    ) {
+                        pageTitle.textContent =
+                            "Menu";
+                    }
 
+                }
 
-                <div class="order-items">
+                // Load correct section
+                if (
+                    target === "ordersSection"
+                ) {
+                    loadOrders();
+                }
 
-                    <h4>
-                        ORDER ITEMS
-                    </h4>
+                if (
+                    target === "menuSection"
+                ) {
+                    loadMenu();
+                }
 
-                    ${itemsHTML}
-
-                </div>
-
-
-            </div>
-
-
-            <div class="order-card-footer">
-
-
-                <div class="order-total">
-
-                    <span>
-                        TOTAL
-                    </span>
-
-                    <strong>
-                        ৳${Number(
-                            order.total
-                        ).toLocaleString()}
-                    </strong>
-
-                </div>
-
-
-                <div class="order-actions">
-
-                    <select
-                        class="status-select"
-                        data-order-id="${order.id}"
-                    >
-
-                        <option
-                            value="Pending"
-                            ${
-                                order.status ===
-                                "Pending"
-                                ? "selected"
-                                : ""
-                            }
-                        >
-                            Pending
-                        </option>
-
-
-                        <option
-                            value="Preparing"
-                            ${
-                                order.status ===
-                                "Preparing"
-                                ? "selected"
-                                : ""
-                            }
-                        >
-                            Preparing
-                        </option>
-
-
-                        <option
-                            value="Completed"
-                            ${
-                                order.status ===
-                                "Completed"
-                                ? "selected"
-                                : ""
-                            }
-                        >
-                            Completed
-                        </option>
-
-
-                        <option
-                            value="Cancelled"
-                            ${
-                                order.status ===
-                                "Cancelled"
-                                ? "selected"
-                                : ""
-                            }
-                        >
-                            Cancelled
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-        `;
-
-
-        container.appendChild(
-            card
+            }
         );
 
     });
 
 
-    setupStatusChanges();
+    // ======================================================
+    // LOGOUT
+    // ======================================================
 
-}
+    if (logoutButton) {
 
+        logoutButton.addEventListener(
+            "click",
+            async () => {
 
-/* =========================
-   UPDATE STATUS
-========================= */
+                try {
 
-function setupStatusChanges() {
+                    await fetch(
+                        "/api/logout",
+                        {
+                            method: "POST",
+                            credentials: "include"
+                        }
+                    );
 
-    const selects =
-        document.querySelectorAll(
-            ".status-select"
+                } catch (error) {
+
+                    console.error(
+                        "Logout error:",
+                        error
+                    );
+
+                }
+
+                window.location.href =
+                    "/admin/login.html";
+
+            }
         );
 
+    }
 
-    selects.forEach(select => {
 
-        select.addEventListener(
+    // ======================================================
+    // LOAD ORDERS
+    // ======================================================
+
+    async function loadOrders() {
+
+        if (!ordersContainer) {
+            return;
+        }
+
+        ordersContainer.innerHTML = `
+            <div class="orders-loading">
+                Loading orders...
+            </div>
+        `;
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/orders",
+                    {
+                        method: "GET",
+                        credentials: "include",
+                        headers: {
+                            "Accept":
+                                "application/json"
+                        }
+                    }
+                );
+
+            if (response.status === 401) {
+
+                window.location.href =
+                    "/admin/login.html";
+
+                return;
+
+            }
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Could not load orders."
+                );
+
+            }
+
+            const orders =
+                await response.json();
+
+            console.log(
+                "Orders:",
+                orders
+            );
+
+            displayOrders(orders);
+
+            updateStatistics(orders);
+
+        } catch (error) {
+
+            console.error(
+                "ORDER LOAD ERROR:",
+                error
+            );
+
+            ordersContainer.innerHTML = `
+                <div class="orders-empty">
+                    <h3>Could not load orders</h3>
+                    <p>
+                        Please refresh the page
+                        and try again.
+                    </p>
+                </div>
+            `;
+
+        }
+
+    }
+
+
+    // ======================================================
+    // DISPLAY ORDERS
+    // ======================================================
+
+    function displayOrders(orders) {
+
+        if (!Array.isArray(orders)) {
+            orders = [];
+        }
+
+        if (orders.length === 0) {
+
+            ordersContainer.innerHTML = `
+                <div class="orders-empty">
+                    <h3>No Orders Yet</h3>
+                    <p>
+                        Customer orders will appear here.
+                    </p>
+                </div>
+            `;
+
+            if (orderBadge) {
+                orderBadge.textContent = "0";
+                orderBadge.style.display = "none";
+            }
+
+            return;
+        }
+
+        const pendingCount =
+            orders.filter(order =>
+                String(order.status || "")
+                    .toLowerCase() === "pending"
+            ).length;
+
+        if (orderBadge) {
+
+            orderBadge.textContent =
+                pendingCount;
+
+            orderBadge.style.display =
+                pendingCount > 0
+                    ? "inline-flex"
+                    : "none";
+
+        }
+
+
+        ordersContainer.innerHTML = "";
+
+
+        orders.forEach(order => {
+
+            let items = [];
+
+            if (Array.isArray(order.items)) {
+                items = order.items;
+            }
+
+            else if (
+                typeof order.items === "string"
+            ) {
+
+                try {
+
+                    items =
+                        JSON.parse(
+                            order.items
+                        );
+
+                } catch {
+
+                    items = [];
+
+                }
+
+            }
+
+
+            const status =
+                order.status ||
+                "Pending";
+
+            const total =
+                Number(order.total) || 0;
+
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "order-card";
+
+
+            const itemsHTML =
+                items.map(item => {
+
+                    const name =
+                        escapeHTML(
+                            item.name ||
+                            item.title ||
+                            "Food"
+                        );
+
+                    const quantity =
+                        Number(
+                            item.quantity ||
+                            item.qty ||
+                            1
+                        );
+
+                    const price =
+                        Number(item.price) || 0;
+
+
+                    return `
+                        <div class="order-item">
+
+                            <div>
+                                <strong>
+                                    ${name}
+                                </strong>
+
+                                <span>
+                                    × ${quantity}
+                                </span>
+                            </div>
+
+                            <strong>
+                                ৳${(
+                                    price *
+                                    quantity
+                                ).toFixed(2)}
+                            </strong>
+
+                        </div>
+                    `;
+
+                }).join("");
+
+
+            card.innerHTML = `
+
+                <div class="order-card-header">
+
+                    <div>
+
+                        <div class="order-number">
+                            Order #${order.id}
+                        </div>
+
+                        <div class="order-date">
+                            ${formatDate(
+                                order.created_at
+                            )}
+                        </div>
+
+                    </div>
+
+                    <div class="
+                        order-status
+                        ${getStatusClass(status)}
+                    ">
+                        ${escapeHTML(status)}
+                    </div>
+
+                </div>
+
+
+                <div class="order-card-body">
+
+                    <div class="customer-details">
+
+                        <h4>
+                            Customer Details
+                        </h4>
+
+                        <p>
+                            <strong>Name:</strong>
+                            ${escapeHTML(
+                                order.customer_name ||
+                                ""
+                            )}
+                        </p>
+
+                        <p>
+                            <strong>Phone:</strong>
+                            ${escapeHTML(
+                                order.phone ||
+                                ""
+                            )}
+                        </p>
+
+                        <p>
+                            <strong>Address:</strong>
+                            ${escapeHTML(
+                                order.address ||
+                                ""
+                            )}
+                        </p>
+
+                        ${
+                            order.note
+                            ? `
+                                <p>
+                                    <strong>Note:</strong>
+                                    ${escapeHTML(
+                                        order.note
+                                    )}
+                                </p>
+                            `
+                            : ""
+                        }
+
+                    </div>
+
+
+                    <div class="order-items">
+
+                        <h4>
+                            Order Items
+                        </h4>
+
+                        ${
+                            itemsHTML ||
+                            `
+                                <div class="order-item">
+                                    No items found
+                                </div>
+                            `
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="order-card-footer">
+
+                    <div class="order-total">
+
+                        Total:
+                        <strong>
+                            ৳${total.toFixed(2)}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="order-actions">
+
+                        <select
+                            class="status-select"
+                            data-order-id="${order.id}"
+                        >
+
+                            <option
+                                value="Pending"
+                                ${
+                                    status ===
+                                    "Pending"
+                                    ? "selected"
+                                    : ""
+                                }
+                            >
+                                Pending
+                            </option>
+
+                            <option
+                                value="Preparing"
+                                ${
+                                    status ===
+                                    "Preparing"
+                                    ? "selected"
+                                    : ""
+                                }
+                            >
+                                Preparing
+                            </option>
+
+                            <option
+                                value="Completed"
+                                ${
+                                    status ===
+                                    "Completed"
+                                    ? "selected"
+                                    : ""
+                                }
+                            >
+                                Completed
+                            </option>
+
+                            <option
+                                value="Cancelled"
+                                ${
+                                    status ===
+                                    "Cancelled"
+                                    ? "selected"
+                                    : ""
+                                }
+                            >
+                                Cancelled
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            ordersContainer.appendChild(card);
+
+        });
+
+
+        setupStatusChanges();
+
+    }
+
+
+    // ======================================================
+    // UPDATE ORDER STATUS
+    // ======================================================
+
+    function setupStatusChanges() {
+
+        const selects =
+            document.querySelectorAll(
+                ".status-select"
+            );
+
+
+        selects.forEach(select => {
+
+            select.addEventListener(
+                "change",
+                async () => {
+
+                    const orderId =
+                        select.dataset.orderId;
+
+                    const status =
+                        select.value;
+
+                    select.disabled = true;
+
+
+                    try {
+
+                        const response =
+                            await fetch(
+                                `/api/orders/${orderId}/status`,
+                                {
+                                    method: "PATCH",
+
+                                    credentials:
+                                        "include",
+
+                                    headers: {
+                                        "Content-Type":
+                                            "application/json"
+                                    },
+
+                                    body:
+                                        JSON.stringify({
+                                            status
+                                        })
+
+                                }
+                            );
+
+
+                        if (
+                            response.status ===
+                            401
+                        ) {
+
+                            window.location.href =
+                                "/admin/login.html";
+
+                            return;
+
+                        }
+
+
+                        const data =
+                            await response.json();
+
+
+                        if (
+                            !response.ok ||
+                            !data.success
+                        ) {
+
+                            throw new Error(
+                                data.message ||
+                                "Status update failed."
+                            );
+
+                        }
+
+
+                        await loadOrders();
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "STATUS ERROR:",
+                            error
+                        );
+
+                        alert(
+                            "Could not update order status."
+                        );
+
+                        await loadOrders();
+
+                    }
+
+                }
+            );
+
+        });
+
+    }
+
+
+    // ======================================================
+    // REFRESH ORDERS
+    // ======================================================
+
+    if (refreshOrdersButton) {
+
+        refreshOrdersButton.addEventListener(
+            "click",
+            loadOrders
+        );
+
+    }
+
+
+    // ======================================================
+    // DASHBOARD STATISTICS
+    // ======================================================
+
+    function updateStatistics(orders) {
+
+        const total =
+            orders.length;
+
+        const pending =
+            orders.filter(order =>
+                String(order.status || "")
+                    .toLowerCase() ===
+                "pending"
+            ).length;
+
+        const completed =
+            orders.filter(order =>
+                String(order.status || "")
+                    .toLowerCase() ===
+                "completed"
+            ).length;
+
+        const sales =
+            orders
+                .filter(order =>
+                    String(order.status || "")
+                        .toLowerCase() !==
+                    "cancelled"
+                )
+                .reduce(
+                    (sum, order) =>
+                        sum +
+                        (
+                            Number(order.total) ||
+                            0
+                        ),
+                    0
+                );
+
+
+        if (totalOrders) {
+            totalOrders.textContent =
+                total;
+        }
+
+        if (pendingOrders) {
+            pendingOrders.textContent =
+                pending;
+        }
+
+        if (completedOrders) {
+            completedOrders.textContent =
+                completed;
+        }
+
+        if (totalSales) {
+            totalSales.textContent =
+                `৳${sales.toFixed(0)}`;
+        }
+
+    }
+
+
+    // ======================================================
+    // MENU - OPEN ADD FORM
+    // ======================================================
+
+    if (addMenuBtn) {
+
+        addMenuBtn.addEventListener(
+            "click",
+            () => {
+
+                resetMenuForm();
+
+                if (menuFormTitle) {
+                    menuFormTitle.textContent =
+                        "Add New Menu";
+                }
+
+                if (menuFormCard) {
+                    menuFormCard.style.display =
+                        "block";
+                }
+
+                menuFormCard?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            }
+        );
+
+    }
+
+
+    // ======================================================
+    // MENU - CLOSE FORM
+    // ======================================================
+
+    function closeMenuForm() {
+
+        if (menuFormCard) {
+            menuFormCard.style.display =
+                "none";
+        }
+
+        resetMenuForm();
+
+    }
+
+
+    if (cancelMenuBtn) {
+
+        cancelMenuBtn.addEventListener(
+            "click",
+            closeMenuForm
+        );
+
+    }
+
+
+    if (closeMenuFormBtn) {
+
+        closeMenuFormBtn.addEventListener(
+            "click",
+            closeMenuForm
+        );
+
+    }
+
+
+    // ======================================================
+    // RESET MENU FORM
+    // ======================================================
+
+    function resetMenuForm() {
+
+        if (menuForm) {
+            menuForm.reset();
+        }
+
+        if (menuId) {
+            menuId.value = "";
+        }
+
+        if (menuFormTitle) {
+            menuFormTitle.textContent =
+                "Add New Menu";
+        }
+
+        if (imagePreviewWrapper) {
+            imagePreviewWrapper.style.display =
+                "none";
+        }
+
+        if (menuImagePreview) {
+            menuImagePreview.src = "";
+        }
+
+        if (menuImage) {
+            menuImage.value = "";
+        }
+
+    }
+
+
+    // ======================================================
+    // MENU IMAGE PREVIEW
+    // ======================================================
+
+    if (menuImage) {
+
+        menuImage.addEventListener(
             "change",
-            async function () {
+            () => {
 
-                const orderId =
-                    this.dataset.orderId;
+                const file =
+                    menuImage.files &&
+                    menuImage.files[0];
 
-                const status =
-                    this.value;
+                if (!file) {
+                    return;
+                }
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    event => {
+
+                        if (menuImagePreview) {
+
+                            menuImagePreview.src =
+                                event.target.result;
+
+                        }
+
+                        if (imagePreviewWrapper) {
+
+                            imagePreviewWrapper.style.display =
+                                "block";
+
+                        }
+
+                    };
+
+
+                reader.readAsDataURL(file);
+
+            }
+        );
+
+    }
+
+
+    // ======================================================
+    // REMOVE IMAGE
+    // ======================================================
+
+    if (removeImageBtn) {
+
+        removeImageBtn.addEventListener(
+            "click",
+            () => {
+
+                if (menuImage) {
+                    menuImage.value = "";
+                }
+
+                if (menuImagePreview) {
+                    menuImagePreview.src = "";
+                }
+
+                if (imagePreviewWrapper) {
+                    imagePreviewWrapper.style.display =
+                        "none";
+                }
+
+            }
+        );
+
+    }
+
+
+    // ======================================================
+    // SAVE / UPDATE MENU
+    // ======================================================
+
+    if (menuForm) {
+
+        menuForm.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+
+                const id =
+                    menuId
+                        ? menuId.value.trim()
+                        : "";
+
+
+                const formData =
+                    new FormData();
+
+
+                formData.append(
+                    "name",
+                    menuName.value.trim()
+                );
+
+                formData.append(
+                    "price",
+                    menuPrice.value
+                );
+
+                formData.append(
+                    "category",
+                    menuCategory.value
+                );
+
+                formData.append(
+                    "description",
+                    menuDescription.value.trim()
+                );
+
+
+                if (
+                    menuImage &&
+                    menuImage.files &&
+                    menuImage.files[0]
+                ) {
+
+                    formData.append(
+                        "image",
+                        menuImage.files[0]
+                    );
+
+                }
+
+
+                const url =
+                    id
+                        ? `/api/menu/${id}`
+                        : "/api/menu";
+
+
+                const method =
+                    id
+                        ? "PUT"
+                        : "POST";
+
+
+                if (saveMenuBtn) {
+
+                    saveMenuBtn.disabled =
+                        true;
+
+                    saveMenuBtn.textContent =
+                        id
+                            ? "Updating..."
+                            : "Saving...";
+
+                }
 
 
                 try {
 
                     const response =
                         await fetch(
-                            `/api/orders/${orderId}/status`,
+                            url,
                             {
-                                method:
-                                    "PATCH",
-
-                                headers: {
-                                    "Content-Type":
-                                        "application/json"
-                                },
-
+                                method,
+                                credentials:
+                                    "include",
                                 body:
-                                    JSON.stringify({
-                                        status:
-                                            status
-                                    })
+                                    formData
                             }
                         );
+
+
+                    if (
+                        response.status ===
+                        401
+                    ) {
+
+                        window.location.href =
+                            "/admin/login.html";
+
+                        return;
+
+                    }
 
 
                     const data =
@@ -543,214 +1123,769 @@ function setupStatusChanges() {
 
 
                     if (
+                        !response.ok ||
                         !data.success
                     ) {
 
                         throw new Error(
-                            data.message
+                            data.message ||
+                            "Could not save menu."
                         );
 
                     }
 
 
-                    loadOrders();
+                    alert(
+                        id
+                            ? "Menu updated successfully."
+                            : "Menu added successfully."
+                    );
+
+
+                    closeMenuForm();
+
+                    await loadMenu();
 
 
                 } catch (error) {
 
                     console.error(
-                        "Status update error:",
+                        "MENU SAVE ERROR:",
                         error
                     );
 
-
                     alert(
-                        "Could not update order status."
+                        error.message ||
+                        "Could not save menu."
                     );
+
+                } finally {
+
+                    if (saveMenuBtn) {
+
+                        saveMenuBtn.disabled =
+                            false;
+
+                        saveMenuBtn.textContent =
+                            "Save Menu";
+
+                    }
 
                 }
 
             }
         );
 
-    });
-
-}
+    }
 
 
-/* =========================
-   STATISTICS
-========================= */
+    // ======================================================
+    // LOAD MENU
+    // ======================================================
 
-function updateStatistics(
-    orders
-) {
+    async function loadMenu() {
 
-    const total =
-        orders.length;
-
-
-    const pending =
-        orders.filter(
-            order =>
-                order.status ===
-                "Pending"
-        ).length;
+        if (!adminMenuList) {
+            return;
+        }
 
 
-    const completed =
-        orders.filter(
-            order =>
-                order.status ===
-                "Completed"
-        ).length;
+        adminMenuList.innerHTML = `
+            <div class="menu-loading">
+                Loading menu...
+            </div>
+        `;
 
 
-    const sales =
-        orders
-            .filter(
-                order =>
-                    order.status !==
-                    "Cancelled"
-            )
-            .reduce(
-                (
-                    sum,
-                    order
-                ) =>
-                    sum +
-                    Number(
-                        order.total
-                    ),
-                0
-            );
+        try {
 
-
-    document.getElementById(
-        "totalOrders"
-    ).textContent =
-        total;
-
-
-    document.getElementById(
-        "pendingOrders"
-    ).textContent =
-        pending;
-
-
-    document.getElementById(
-        "completedOrders"
-    ).textContent =
-        completed;
-
-
-    document.getElementById(
-        "totalSales"
-    ).textContent =
-        `৳${sales.toLocaleString()}`;
-
-
-    document.getElementById(
-        "orderBadge"
-    ).textContent =
-        pending;
-
-}
-
-
-/* =========================
-   STATUS CLASS
-========================= */
-
-function getStatusClass(
-    status
-) {
-
-    return status
-        .toLowerCase()
-        .replace(
-            /\s+/g,
-            "-"
-        );
-
-}
-
-
-/* =========================
-   SECURITY
-========================= */
-
-function escapeHTML(
-    value
-) {
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-    div.textContent =
-        value ?? "";
-
-    return div.innerHTML;
-
-}
-
-
-/* =========================
-   REFRESH
-========================= */
-
-document
-    .getElementById(
-        "refreshOrders"
-    )
-    .addEventListener(
-        "click",
-        loadOrders
-    );
-
-
-/* =========================
-   LOGOUT
-========================= */
-
-document
-    .getElementById(
-        "logoutButton"
-    )
-    .addEventListener(
-        "click",
-        async () => {
-
-            try {
-
+            const response =
                 await fetch(
-                    "/api/logout",
+                    "/api/menu",
                     {
-                        method:
-                            "POST"
+                        method: "GET",
+                        credentials: "include",
+                        headers: {
+                            "Accept":
+                                "application/json"
+                        }
                     }
                 );
 
-            } catch (error) {
 
-                console.error(
-                    error
+            if (!response.ok) {
+
+                throw new Error(
+                    "Could not load menu."
                 );
 
             }
 
 
-            window.location.href =
-                "login.html";
+            const menu =
+                await response.json();
+
+
+            console.log(
+                "Menu:",
+                menu
+            );
+
+
+            renderMenu(menu);
+
+
+        } catch (error) {
+
+            console.error(
+                "MENU LOAD ERROR:",
+                error
+            );
+
+
+            adminMenuList.innerHTML = `
+                <div class="menu-loading">
+                    Could not load menu.
+                </div>
+            `;
 
         }
-    );
+
+    }
 
 
-/* =========================
-   INITIAL LOAD
-========================= */
+    // ======================================================
+    // RENDER MENU
+    // ======================================================
 
-loadOrders();
+    function renderMenu(menu) {
+
+        if (!Array.isArray(menu)) {
+            menu = [];
+        }
+
+
+        if (menuCount) {
+
+            menuCount.textContent =
+                `${menu.length} ${
+                    menu.length === 1
+                        ? "item"
+                        : "items"
+                }`;
+
+        }
+
+
+        if (menu.length === 0) {
+
+            adminMenuList.innerHTML = `
+                <div class="menu-loading">
+                    <h3>No Menu Items</h3>
+                    <p>
+                        Click "+ Add Menu"
+                        to add your first dish.
+                    </p>
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        adminMenuList.innerHTML = "";
+
+
+        menu.forEach(item => {
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "admin-menu-card";
+
+
+            let imageHTML = "";
+
+
+            if (item.image) {
+
+                imageHTML = `
+                    <img
+                        src="${escapeHTML(
+                            getImageURL(
+                                item.image
+                            )
+                        )}"
+                        alt="${escapeHTML(
+                            item.name
+                        )}"
+                    >
+                `;
+
+            }
+
+            else {
+
+                imageHTML = `
+                    <div class="
+                        admin-menu-image-placeholder
+                    ">
+                        No Image
+                    </div>
+                `;
+
+            }
+
+
+            card.innerHTML = `
+
+                <div class="admin-menu-image">
+
+                    ${imageHTML}
+
+                </div>
+
+
+                <div class="admin-menu-info">
+
+                    <span class="
+                        admin-menu-category
+                    ">
+                        ${escapeHTML(
+                            item.category ||
+                            "Other"
+                        )}
+                    </span>
+
+
+                    <h3 class="
+                        admin-menu-name
+                    ">
+                        ${escapeHTML(
+                            item.name
+                        )}
+                    </h3>
+
+
+                    <div class="
+                        admin-menu-price
+                    ">
+                        ৳${(
+                            Number(item.price) ||
+                            0
+                        ).toFixed(0)}
+                    </div>
+
+
+                    <p class="
+                        admin-menu-description
+                    ">
+                        ${escapeHTML(
+                            item.description ||
+                            ""
+                        )}
+                    </p>
+
+
+                    <div class="
+                        admin-menu-actions
+                    ">
+
+                        <button
+                            type="button"
+                            class="menu-edit-btn"
+                            data-id="${item.id}"
+                        >
+                            Edit
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="menu-delete-btn"
+                            data-id="${item.id}"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            adminMenuList.appendChild(card);
+
+        });
+
+
+        setupMenuButtons();
+
+    }
+
+
+    // ======================================================
+    // MENU EDIT / DELETE BUTTONS
+    // ======================================================
+
+    function setupMenuButtons() {
+
+        const editButtons =
+            document.querySelectorAll(
+                ".menu-edit-btn"
+            );
+
+        const deleteButtons =
+            document.querySelectorAll(
+                ".menu-delete-btn"
+            );
+
+
+        // EDIT
+        editButtons.forEach(button => {
+
+            button.addEventListener(
+                "click",
+                async () => {
+
+                    const id =
+                        button.dataset.id;
+
+
+                    try {
+
+                        const response =
+                            await fetch(
+                                "/api/menu",
+                                {
+                                    credentials:
+                                        "include"
+                                }
+                            );
+
+
+                        const menu =
+                            await response.json();
+
+
+                        const item =
+                            menu.find(
+                                menuItem =>
+                                    String(
+                                        menuItem.id
+                                    ) ===
+                                    String(id)
+                            );
+
+
+                        if (!item) {
+
+                            alert(
+                                "Menu item not found."
+                            );
+
+                            return;
+
+                        }
+
+
+                        openEditMenu(item);
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "EDIT ERROR:",
+                            error
+                        );
+
+                        alert(
+                            "Could not open menu item."
+                        );
+
+                    }
+
+                }
+            );
+
+        });
+
+
+        // DELETE
+        deleteButtons.forEach(button => {
+
+            button.addEventListener(
+                "click",
+                async () => {
+
+                    const id =
+                        button.dataset.id;
+
+
+                    const confirmed =
+                        confirm(
+                            "Are you sure you want to delete this menu item?"
+                        );
+
+
+                    if (!confirmed) {
+                        return;
+                    }
+
+
+                    button.disabled =
+                        true;
+
+                    button.textContent =
+                        "Deleting...";
+
+
+                    try {
+
+                        const response =
+                            await fetch(
+                                `/api/menu/${id}`,
+                                {
+                                    method:
+                                        "DELETE",
+
+                                    credentials:
+                                        "include"
+                                }
+                            );
+
+
+                        if (
+                            response.status ===
+                            401
+                        ) {
+
+                            window.location.href =
+                                "/admin/login.html";
+
+                            return;
+
+                        }
+
+
+                        const data =
+                            await response.json();
+
+
+                        if (
+                            !response.ok ||
+                            !data.success
+                        ) {
+
+                            throw new Error(
+                                data.message ||
+                                "Delete failed."
+                            );
+
+                        }
+
+
+                        await loadMenu();
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "DELETE ERROR:",
+                            error
+                        );
+
+                        alert(
+                            error.message ||
+                            "Could not delete menu."
+                        );
+
+
+                        button.disabled =
+                            false;
+
+                        button.textContent =
+                            "Delete";
+
+                    }
+
+                }
+            );
+
+        });
+
+    }
+
+
+    // ======================================================
+    // OPEN EDIT MENU
+    // ======================================================
+
+    function openEditMenu(item) {
+
+        if (menuFormCard) {
+            menuFormCard.style.display =
+                "block";
+        }
+
+
+        if (menuFormTitle) {
+            menuFormTitle.textContent =
+                "Edit Menu";
+        }
+
+
+        if (menuId) {
+            menuId.value =
+                item.id || "";
+        }
+
+
+        if (menuName) {
+            menuName.value =
+                item.name || "";
+        }
+
+
+        if (menuPrice) {
+            menuPrice.value =
+                item.price || "";
+        }
+
+
+        if (menuCategory) {
+            menuCategory.value =
+                item.category || "";
+        }
+
+
+        if (menuDescription) {
+            menuDescription.value =
+                item.description || "";
+        }
+
+
+        if (item.image) {
+
+            if (menuImagePreview) {
+
+                menuImagePreview.src =
+                    getImageURL(
+                        item.image
+                    );
+
+            }
+
+
+            if (imagePreviewWrapper) {
+
+                imagePreviewWrapper.style.display =
+                    "block";
+
+            }
+
+        }
+
+
+        menuFormCard?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+
+    // ======================================================
+    // IMAGE URL
+    // ======================================================
+
+    function getImageURL(image) {
+
+        if (!image) {
+            return "";
+        }
+
+
+        const value =
+            String(image).trim();
+
+
+        if (
+            value.startsWith("http://") ||
+            value.startsWith("https://")
+        ) {
+
+            return value;
+
+        }
+
+
+        if (
+            value.startsWith("/uploads/")
+        ) {
+
+            return value;
+
+        }
+
+
+        if (
+            value.startsWith("uploads/")
+        ) {
+
+            return "/" + value;
+
+        }
+
+
+        if (
+            value.startsWith("/images/")
+        ) {
+
+            return value;
+
+        }
+
+
+        if (
+            value.startsWith("images/")
+        ) {
+
+            return "/" + value;
+
+        }
+
+
+        return "/" +
+            value.replace(
+                /^\/+/,
+                ""
+            );
+
+    }
+
+
+    // ======================================================
+    // HTML ESCAPE
+    // ======================================================
+
+    function escapeHTML(value) {
+
+        return String(
+            value ?? ""
+        )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+    }
+
+
+    // ======================================================
+    // STATUS CLASS
+    // ======================================================
+
+    function getStatusClass(status) {
+
+        switch (
+            String(status || "")
+                .toLowerCase()
+        ) {
+
+            case "pending":
+                return "status-pending";
+
+            case "preparing":
+                return "status-preparing";
+
+            case "completed":
+                return "status-completed";
+
+            case "cancelled":
+                return "status-cancelled";
+
+            default:
+                return "status-pending";
+
+        }
+
+    }
+
+
+    // ======================================================
+    // DATE FORMAT
+    // ======================================================
+
+    function formatDate(value) {
+
+        if (!value) {
+            return "";
+        }
+
+
+        const date =
+            new Date(
+                String(value)
+                    .replace(
+                        " ",
+                        "T"
+                    )
+            );
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return escapeHTML(
+                value
+            );
+
+        }
+
+
+        return date.toLocaleString(
+            "en-BD",
+            {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit"
+            }
+        );
+
+    }
+
+
+    // ======================================================
+    // INITIAL LOAD
+    // ======================================================
+
+    loadOrders();
+
+    loadMenu();
+
+});
